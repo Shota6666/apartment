@@ -1558,14 +1558,19 @@ generatePassiveThreats: function() {
             return;
         }
 
-// --- 新增：結算上一時段未處理的威脅 ---
+        // --- 新增：結算上一時段未處理的威脅 ---
         CCTVSystem.checkUnpurgedThreats();
+
+        // ★★★ 修正點：如果結算威脅後導致死亡，立即停止後續邏輯 ★★★
+        if (GameState.isGameOver) return; 
 
         // --- 新增：隨機產生下一時段的新威脅 ---
         CCTVSystem.generatePassiveThreats();
 
         updateUI();
         let currentTime = GameState.timePoints[GameState.timeIndex];
+        
+        // 下方邏輯保持不變...
         document.getElementById('choices-area').classList.remove('show');
 
         log(`<br>=== 時間：${currentTime} ===`, 'system', () => {
